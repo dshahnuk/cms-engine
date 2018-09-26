@@ -1,0 +1,139 @@
+table td {
+  vertical-align: middle !important;
+}
+.wrapper {
+	margin-top: 80px;
+  margin-bottom: 80px;
+}
+
+.form-signin {
+  max-width: 380px;
+  padding: 15px 35px 45px;
+  margin: 0 auto;
+  background-color: #fff;
+  border: 1px solid rgba(0,0,0,0.1);
+
+  .form-signin-heading,
+	.checkbox {
+	  margin-bottom: 30px;
+	}
+
+	.checkbox {
+	  font-weight: normal;
+	}
+
+	.form-control {
+	  position: relative;
+	  font-size: 16px;
+	  height: auto;
+	  padding: 10px;
+      box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+
+
+		&:focus {
+		  z-index: 2;
+		}
+	}
+
+	input[type="email"] {
+	  margin-bottom: -1px;
+	  border-bottom-left-radius: 0;
+	  border-bottom-right-radius: 0;
+	}
+
+	input[type="password"] {
+	  margin-bottom: 20px;
+	  border-top-left-radius: 0;
+	  border-top-right-radius: 0;
+	}
+}
+.not-published {
+  font-style: italic;
+  opacity: 0.8;
+}
+.as-sortable-item, .as-sortable-placeholder {
+    display: table-row;
+}
+#sidebar-wrapper {
+  z-index: 0;
+}
+.alertify-logs {
+  width: 350px;
+}
+.CodeMirror {
+  height: 500px;
+  font-size: 16px;
+  // pre {
+  //   font-family: 'casperregular';
+  // }
+}
+// .cm-s-default {
+//   .cm-tag, .cm-attribute, .cm-string, .cm-comment {
+//     font-family: monospace;
+//   }
+// }
+.assets-block {
+  a.btn.add-asset {
+    border: none;
+    border-radius: 3px;
+    padding: 6px 12px;
+    margin-right: 0;
+    &:hover, &:focus {
+      background-color: #3071a9;
+    }
+  }
+  .table-responsive {
+    background: #fff;
+    color: #333333;
+  }
+}
+.nav-tabs li a {
+  cursor: pointer;
+}
+.widget .widget-header table i {
+  margin-right: 0px;
+}
+.vertical-center {
+  min-height: 80%;  /* Fallback for browsers do NOT support vh unit */
+  min-height: 80vh; /* These two lines are counted as one :-)       */
+
+  display: flex;
+  align-items: center;
+}
+.jumbotron {
+  background-color: inherit;
+  i.fa-stack-1x {
+    color: #ff5274;
+  }
+  i.fa-stack-2x {
+    color: white;
+  }
+}
+.row.header .meta .page {
+  padding-top: 17px;
+}
+svg.logo {
+  vertical-align: top;
+  margin-right: -10px;
+}
+ul.sidebar .sidebar-main {
+  height: 75px;
+  a {
+    line-height: 70px;
+  }
+}
+.hotkey-notification:active {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+ul.sidebar .sidebar-list.active a {
+  color: #fff;
+  border-left: 3px solid #ff5274;
+  text-indent: 22px;
+  background: #2d3e63;
+  .menu-icon {
+    text-indent: 25px;
+  }
+}

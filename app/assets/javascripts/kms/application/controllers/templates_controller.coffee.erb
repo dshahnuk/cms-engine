@@ -1,0 +1,62 @@
+TemplatesController = ($scope, $state, $cookieStore, Restangular, $stateParams, Alertify, ErrorsService, hotkeys) ->
+  $scope.editorOptions =
+    lineNumbers: true
+    mode: 'htmlmixedliquor'
+    autoCloseTags: true
+    matchBrackets: true
+    autoCloseBrackets: true
+    styleActiveLine: true
+    matchTags:
+      bothTags: true
+    extraKeys:
+      "F11": (cm)->
+        cm.setOption("fullScreen", !cm.getOption("fullScreen"))
+      "Esc": (cm)->
+        if cm.getOption("fullScreen") then cm.setOption("fullScreen", false)
+      "Tab": 'emmetExpandAbbreviation'
+
+  $scope.store = Restangular.all('templates')
+  $scope.store.getList().then (templates)->
+    $scope.templates = templates
+
+  Restangular.all('users').customGET('kms_user').then (current_user) ->
+    $scope.currentUser = current_user
+    $scope.currentUser.admin = $scope.currentUser.role == 'admin'
+
+  if $stateParams.id
+    $scope.store.get($stateParams.id).then (template)->
+      $scope.template = template
+  else
+    $scope.template = {name: '', content: ''}
+
+  hotkeys.add
+    combo: 'ctrl+s'
+    description: 'Saving a template'
+    allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
+    callback: (event) ->
+      event.preventDefault()
+      if $scope.template.id then $scope.update(event) else $scope.create()
+
+  $scope.create = ->
+    $scope.store.post($scope.template).then ->
+      $state.go('templates')
+      Alertify.success('<%= I18n.t(:template_successfully_created) %>')
+    , (response)->
+      Alertify.error(ErrorsService.prepareErrorsString(response.data.errors))
+
+  $scope.update = ($event)->
+    $scope.template.put().then ->
+      if $event.target.attributes['data-redirect']
+        $state.go('templates')
+      Alertify.success('<%= I18n.t(:template_successfully_updated) %>')
+    ,(response)->
+      Alertify.error(ErrorsService.prepareErrorsString(response.data.errors))
+
+  $scope.destroy = (template)->
+    if(confirm('<%= I18n.t(:are_you_sure) %>'))
+      template.remove().then ->
+        $scope.templates = _.without($scope.templates, template)
+
+
+angular.module('KMS')
+    .controller('TemplatesController', ['$scope', '$state', '$cookieStore', 'Restangular', '$stateParams', 'Alertify', 'ErrorsService', 'hotkeys', TemplatesController])

@@ -1,0 +1,61 @@
+SnippetsController = ($scope, $state, Restangular, $stateParams, Alertify, ErrorsService, hotkeys) ->
+  $scope.editorOptions =
+    lineNumbers: true
+    mode: 'htmlmixedliquor'
+    autoCloseTags: true
+    matchBrackets: true
+    autoCloseBrackets: true
+    styleActiveLine: true
+    matchTags:
+      bothTags: true
+    extraKeys:
+      "F11": (cm)->
+        cm.setOption("fullScreen", !cm.getOption("fullScreen"))
+      "Esc": (cm)->
+        if cm.getOption("fullScreen") then cm.setOption("fullScreen", false)
+      "Tab": 'emmetExpandAbbreviation'
+
+  $scope.store = Restangular.all('snippets')
+  $scope.store.getList().then (snippets)->
+    $scope.snippets = snippets
+
+  Restangular.all('users').customGET('kms_user').then (current_user) ->
+    $scope.currentUser = current_user
+    $scope.currentUser.admin = $scope.currentUser.role == 'admin'
+
+  if $stateParams.id
+    $scope.store.get($stateParams.id).then (snippet)->
+      $scope.snippet = snippet
+  else
+    $scope.snippet = {content: ''}
+
+  hotkeys.add
+    combo: 'ctrl+s'
+    description: 'Saving a snippet'
+    allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
+    callback: (event) ->
+      event.preventDefault()
+      if $scope.snippet.id then $scope.update(event) else $scope.create()
+
+  $scope.create = ->
+    $scope.store.post($scope.snippet).then ->
+      $state.go('snippets')
+      Alertify.success('<%= I18n.t(:snippet_successfully_created) %>')
+    , (response)->
+      Alertify.error(ErrorsService.prepareErrorsString(response.data.errors))
+
+  $scope.update = (event)->
+    $scope.snippet.put().then ->
+      if event.target.attributes['data-redirect']
+        $state.go('snippets')
+      Alertify.success('<%= I18n.t(:snippet_successfully_updated) %>')
+    ,(response)->
+      Alertify.error(ErrorsService.prepareErrorsString(response.data.errors))
+
+  $scope.destroy = (snippet)->
+    if(confirm('<%= I18n.t(:are_you_sure) %>'))
+      snippet.remove().then ->
+        $scope.snippets = _.without($scope.snippets, snippet)
+
+angular.module('KMS')
+    .controller('SnippetsController', ['$scope', '$state', 'Restangular', '$stateParams', 'Alertify', 'ErrorsService', 'hotkeys', SnippetsController])

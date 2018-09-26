@@ -1,0 +1,172 @@
+.row
+  .col-lg-12
+    ul.nav.nav-tabs
+      li role="presentation" ng-class="{active: isActiveTab(0)}" ng-click="setActive(0)"
+        a href="#liquor" Liquor
+      - Kms::HelpService.templates.each_with_index do |(engine_class, _),index|
+        li role="presentation" ng-class="{active: isActiveTab(#{index + 1})}" ng-click="setActive(#{index + 1})"
+          a href="##{engine_class.engine_name}" = engine_class.engine_name.humanize.gsub('Kms', 'APIQ')
+    div class="tab-content"
+      div role="tabpanel" class="tab-pane" ng-class="{active: isActiveTab(0)}" id="liquor"
+        .widget
+          .widget-body.no-padding
+            .message
+              h4 = I18n.t("liquor_help.tags_title")
+              p
+                ul
+                  li
+                    var declare
+                    p
+                      span = I18n.t('liquor_help.tags.declare.main_description')
+                    p
+                      code
+                        | {% declare var = expr %}
+                    p
+                      span = I18n.t('liquor_help.tags.declare.additional_description')
+                  li
+                    var assign
+                    p
+                      span = I18n.t('liquor_help.tags.assign.main_description')
+                    p
+                      code
+                        | {% assign var = expr %}
+                  li
+                    em if
+                    p
+                      span = I18n.t('liquor_help.tags.if.main_description')
+                    p
+                      code
+                        | {% if cond-1 then: %}
+                        br
+                        | &nbsp;&nbsp;code-1
+                        br
+                        | [{% elsif: cond-2 then: %}
+                        br
+                        | &nbsp;&nbsp;code-2] ...
+                        br
+                        | [{% else: %}
+                        br
+                        | &nbsp;&nbsp;code-else]
+                        br
+                        | {% end if %}
+                  li
+                    em unless
+                    p
+                      span = I18n.t('liquor_help.tags.unless.main_description')
+                    p
+                      code
+                        | {% unless cond-1 then: %}
+                        br
+                        | &nbsp;&nbsp;code-1
+                        br
+                        | {% end unless %}
+                  li
+                    em for
+                    p
+                      span = I18n.t('liquor_help.tags.for.main_description')
+                    p
+                      code
+                        | {% for var in: list do: %}
+                        br
+                        |  &nbsp;&nbsp;code
+                        br
+                        | {% end for %}
+                        br
+                        | {% for var from: lower-limit to: upper-limit do: %}
+                        br
+                        |  &nbsp;&nbsp;code
+                        br
+                        | {% end for %}
+                  li
+                    em capture
+                    p
+                      span = I18n.t('liquor_help.tags.capture.main_description')
+                    p
+                      code
+                        | {% capture var = %}
+                        br
+                        | &nbsp;&nbsp;code
+                        br
+                        | {% end capture %}
+                  li
+                    em content_for
+                    p
+                      span = I18n.t('liquor_help.tags.content_for.main_description')
+                    p
+                      code
+                        | {% content_for "handle" capture: %}
+                        br
+                        | &nbsp;&nbsp;code
+                        br
+                        | {% end content_for %}
+                  li
+                    em yield
+                    p
+                      span = I18n.t('liquor_help.tags.yield.main_description')
+                    p
+                      code
+                        | {% yield %}
+                        br
+                        | &nbsp;&nbsp;#{ I18n.t('or') }
+                        br
+                        | {% yield "handle" %}
+                        br
+                        | &nbsp;&nbsp;#{ I18n.t('or') }
+                        br
+                        | {% yield "handle" if_none: %}
+                        br
+                        | &nbsp;&nbsp;code
+                        br
+                        | {% end yield %}
+                  li
+                    em include
+                    p
+                      span = I18n.t('liquor_help.tags.include.main_description')
+                    p
+                      code
+                        | {% include "partial_name" %}
+            .message
+              h4 = I18n.t("liquor_help.variables_title")
+              p
+                ul
+                  li
+                    var var_loop
+                    p
+                      span = I18n.t('liquor_help.variables.var_loop.main_description')
+                    p
+                      code ng-non-bindable=""
+                        | {% for p in: index.children do: %}
+                        br
+                        | &nbsp;&nbsp;{{ p_loop.index }} # prints number of current iteration
+                    p
+                      table.table
+                        tr
+                          th #{ I18n.t('liquor_help.property') } var_loop
+                          th = I18n.t('liquor_help.description')
+                        tr
+                          td length
+                          td = I18n.t('liquor_help.variables.var_loop.properties.length')
+                        tr
+                          td index
+                          td = I18n.t('liquor_help.variables.var_loop.properties.index')
+                        tr
+                          td rindex
+                          td
+                            | length - index - 1
+                        tr
+                          td is_first
+                          td
+                            | index == 0
+                        tr
+                          td is_last
+                          td
+                            | index == length - 1
+            .message
+              a href="http://evilmartians.github.io/liquor/language-spec.html" target="_blank" = I18n.t('liquor_help.specification')
+      - Kms::HelpService.templates.each_with_index do |(engine_class, templates), index|
+        div role="tabpanel" class="tab-pane" ng-class="{active: isActiveTab(#{index + 1})}" id=engine_class.engine_name
+          .widget
+            .widget-body.no-padding
+              - templates.each do |template|
+                .message
+                  ng-include src="'#{template}'"

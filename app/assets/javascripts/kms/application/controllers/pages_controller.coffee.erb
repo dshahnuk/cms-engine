@@ -1,0 +1,116 @@
+PagesController = ($scope, $state, $cookieStore, Restangular, $stateParams, Alertify, ErrorsService, TransliterationService, hotkeys) ->
+  $scope.editorOptions =
+    filebrowserUploadUrl: '/kms/assets/ckeditor'
+    entities: false
+    language: '<%= I18n.locale.to_s %>'
+  $scope.codeMirrorOptions =
+    lineNumbers: true
+    mode: 'htmlmixedliquor'
+    autoCloseTags: true
+    matchBrackets: true
+    autoCloseBrackets: true
+    styleActiveLine: true
+    matchTags:
+      bothTags: true
+    extraKeys:
+      "F11": (cm)->
+        cm.setOption("fullScreen", !cm.getOption("fullScreen"))
+      "Esc": (cm)->
+        if cm.getOption("fullScreen") then cm.setOption("fullScreen", false)
+      "Tab": 'emmetExpandAbbreviation'
+
+  $scope.$watch 'page.title', (newValue, oldValue) ->
+    if newValue? and $scope.page.slug != 'index' and !$scope.page.id
+      $scope.page.slug = _.kebabCase TransliterationService.translit(newValue, 5).replace(/`/g, '')
+
+  Restangular.all('resources').getList().then (templatable_types)->
+    $scope.templatable_types = templatable_types
+
+  Restangular.all('templates').getList().then (templates)->
+    $scope.templates = templates
+  $scope.store = Restangular.all('pages')
+
+  Restangular.all('users').customGET('kms_user').then (current_user) ->
+    $scope.currentUser = current_user
+    $scope.currentUser.admin = $scope.currentUser.role == 'admin'
+
+  $scope.exceptCurrentPage = (pages) ->
+    new_pages = []
+    for p in pages
+      new_pages.push(p) if p.id != parseInt($stateParams.id)
+    new_pages
+
+  if $stateParams.id
+    $scope.store.get($stateParams.id).then (page)->
+      $scope.page = page
+      unless $scope.page.parent_id
+        index_page = _.select($scope.pages, (p) -> p.slug == 'index')[0]
+        $scope.page.parent_id = (if index_page then index_page.id else null)
+  else
+    $scope.page = {}
+
+  build_parent_pages = (pages, depth) ->
+    str = ""
+    i=0
+    while i < depth
+      str = str+ '-'
+      i++
+    options = []
+    angular.forEach(pages, (value, key) ->
+      options.push({id: value.id, title: str+value.title})
+      if value.children.length > 0
+        options = options.concat(build_parent_pages(value.children, depth+1)))
+    return options
+
+
+  $scope.store.getList().then (pages)->
+    $scope.pages = pages
+    $scope.parentPages = build_parent_pages(pages, 0)
+    if $stateParams.id
+      $scope.pages = $scope.exceptCurrentPage($scope.pages)
+      $scope.parentPages = $scope.exceptCurrentPage($scope.parentPages)
+    $scope.page.slug = "index" if $scope.pages.length == 0
+    if $scope.parentPages.length > 0 and $scope.page and !$scope.page.parent_id and !$stateParams.id
+      $scope.page.parent_id = $scope.parentPages[0].id
+
+  hotkeys.add
+    combo: 'ctrl+s'
+    description: 'Saving a page'
+    allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
+    callback: (event) ->
+      event.preventDefault()
+      if $scope.page.id then $scope.update(event) else $scope.create()
+
+
+  $scope.create = ->
+    $scope.store.post($scope.page).then ->
+      $state.go('pages')
+      Alertify.success('<%= I18n.t(:page_successfully_created) %>')
+    ,(response)->
+      Alertify.error(ErrorsService.prepareErrorsString(response.data.errors))
+
+  $scope.update = ($event)->
+    $scope.page.put().then ->
+      if $event.target.attributes['data-redirect']
+        $state.go('pages')
+      Alertify.success('<%= I18n.t(:page_successfully_updated) %>')
+    ,(response)->
+      Alertify.error(ErrorsService.prepareErrorsString(response.data.errors))
+
+  $scope.destroy = (page)->
+    if(confirm('<%= I18n.t(:are_you_sure) %>'))
+      Restangular.restangularizeElement(null, page, 'pages').remove().then ->
+        $scope.store.getList().then (pages)->
+          $scope.pages = pages
+
+  $scope.toggle = (scope) ->
+    scope.toggle()
+
+  $scope.treeOptions = {
+      dropped: (event) ->
+        Restangular.all('pages').customPOST(angular.toJson($scope.pages),'sorting').then (pages) ->
+          $scope.pages = pages
+  }
+
+angular.module('KMS')
+    .controller('PagesController', ['$scope', '$state', '$cookieStore', 'Restangular', '$stateParams', 'Alertify', 'ErrorsService', 'TransliterationService', 'hotkeys', PagesController])

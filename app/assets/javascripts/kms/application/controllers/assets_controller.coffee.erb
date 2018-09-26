@@ -1,0 +1,90 @@
+AssetsController = ($scope, $state, $cookieStore, $cookies, Restangular, $stateParams, Alertify, ErrorsService, hotkeys) ->
+
+  $scope.editorOptions = (asset)->
+    lineNumbers: true
+    mode: $scope.getMode(asset)
+    matchBrackets: true
+    autoCloseBrackets: true
+    styleActiveLine: true
+    extraKeys:
+      "F11": (cm)->
+        cm.setOption("fullScreen", !cm.getOption("fullScreen"))
+      "Esc": (cm)->
+        if cm.getOption("fullScreen") then cm.setOption("fullScreen", false)
+
+
+  $scope.store = Restangular.all('assets')
+  $scope.store.getList().then (assets)->
+    $scope.assetsArray = assets
+    $scope.assets = _.groupBy assets, (asset)->
+      $scope.getAssetGroup(asset)
+    $state.go('assets.new') if $scope.assetsArray.length == 0
+
+  if $stateParams.id
+    $scope.store.get($stateParams.id).then (asset)->
+      $scope.asset = asset
+      if /css|javascript/.test $scope.getAssetGroup(asset)
+        $scope.asset.performing_plain_text = true
+
+  hotkeys.add
+    combo: 'ctrl+s'
+    description: 'Saving an asset'
+    allowIn: ['INPUT', 'TEXTAREA']
+    callback: (event) ->
+      event.preventDefault()
+      $scope.update(event) if $scope.asset.id
+
+  $scope.handleUploadError = (file, message, flow) ->
+    Alertify.error ErrorsService.prepareErrorsString(JSON.parse(message).errors)
+
+  $scope.update = ($event)->
+    $scope.asset.put().then ->
+      if $event.target.attributes['data-redirect']
+        $state.go('assets')
+      Alertify.success('<%= I18n.t(:asset_successfully_updated) %>')
+    ,(response)->
+      Alertify.error(ErrorsService.prepareErrorsString(response.data.errors))
+
+  $scope.destroy = (asset)->
+    if(confirm('<%= I18n.t(:are_you_sure) %>'))
+      asset.remove().then ->
+        $scope.assetsArray = _.without($scope.assetsArray, asset)
+        for content_type, values of $scope.assets
+          $scope.assets[content_type] = _.without($scope.assets[content_type], asset)
+
+  $scope.setHeaders = ->
+    'X-XSRF-TOKEN': $cookies.get("XSRF-TOKEN") # call func for getting a cookie
+
+  $scope.getMode = (asset)->
+    if /javascript/.test(asset.content_type)
+      "javascript"
+    else if /css/.test(asset.content_type)
+      "css"
+    else
+      "htmlmixed"
+
+  $scope.getAssetGroup = (asset)->
+    if /jpg|jpeg|bmp|gif|png/.test(asset.filename)
+      "images"
+    else if /eot|woff|ttf|woff2/.test(asset.filename)
+      "fonts"
+    else if /css/.test(asset.filename)
+      "css"
+    else if /js/.test(asset.filename)
+      "javascript"
+    else
+      "other"
+
+  $scope.isImageType = (file)->
+    ['jpg', 'jpeg', 'gif', 'png'].indexOf(file.getType()) >= 0
+
+  $scope.updateTarget = (flowFile)->
+    "/kms/assets/#{flowFile.id}.json"
+
+  $scope.initFlowFile = (flowFile)->
+    flowFile['id'] = $scope.asset.id
+    flowFile
+
+
+angular.module('KMS')
+    .controller('AssetsController', ['$scope', '$state', '$cookieStore', '$cookies', 'Restangular', '$stateParams', 'Alertify', 'ErrorsService', 'hotkeys', AssetsController])

@@ -1,0 +1,233 @@
+en:
+  login: "Sign in"
+  sign_up: "Sign up"
+  sign_out: "Sign out"
+  forgot_your_password: "Forgot your password?"
+  remember_me: "Remember me"
+  content_management: "Content management"
+  add_template: "Add template"
+  create_first_template: "Create first template"
+  new_template: "New Template"
+  edit_template: "Edit Template"
+  update_template: "Update template"
+  template_successfully_created: "Template successfully created"
+  template_successfully_updated: "Template successfully updated"
+  add_page: "Add page"
+  create_first_page: "Create first page"
+  new_page: "New Page"
+  edit_page: "Edit Page"
+  update_page: "Update page"
+  page_successfully_created: "Page successfully created"
+  page_successfully_updated: "Page successfully updated"
+  update_page_and_continue: "Update page and continue"
+  update_template_and_continue: "Update template and continue"
+  update_asset_and_continue: "Update asset and continue"
+  update_snippet_and_continue: "Update snippet and continue"
+  add_asset: "Add asset"
+  new_asset: "New Asset"
+  edit_asset: "Edit Asset"
+  update_asset: "Update asset"
+  asset_successfully_updated: "Asset successfully updated"
+  upload_assets: "Upload assets"
+  add_user: "Add user"
+  new_user: "New User"
+  edit_user: "Edit User"
+  update_user: "Update user"
+  toggle_fullscreen_mode_instruction: "Press F11 when cursor is in the editor to toggle full screen editing. ESC can also be used to exit full screen editing."
+  add_snippet: "Add snippet"
+  create_first_snippet: "Create first snippet"
+  new_snippet: "New Snippet"
+  edit_snippet: "Edit Snippet"
+  update_snippet: "Update snippet"
+  snippet_successfully_created: "Snippet successfully created"
+  snippet_successfully_updated: "Snippet successfully updated"
+  documentation: "Documentation"
+  need_help: "Need help?"
+  settings: "Settings"
+  update_settings: "Update settings"
+  no_settings: "No settings specified"
+  yes_word: "Yes"
+  no_word: "No"
+  or: "Or"
+  are_you_sure: "Are you sure?"
+  images: "Images"
+  stylesheets: "Stylesheets"
+  javascripts: "Javascript"
+  fonts: "Fonts"
+  other_assets: "Other"
+  templates_description: "Templates are where your common HTML code should be placed"
+  pages_description: "Pages represent your website hierarchy and their content embeds in Templates"
+  no_templates_yet: "Looks like you don't have templates yet"
+  snippets_description: "Snippets are pieces of HTML that you could include in templates or pages"
+  assets_description: "Upload stylesheets, javascripts, images and other files here (you can even pick multiple)"
+  assets_drop_description: "or just drag and drop them"
+  roles_description: "Admins can manage any content. Content managers have access only to \"Pages\" and \"Assets\" under \"Content Management\" section (but also have access to other sections). The second difference is Admins see pages content in html editor, Content Managers - in WYSIWYG editor"
+  or_hit: "or hit "
+  while_your_cursor_in_input: " while your cursor in input"
+  roles:
+    admin: "Admin"
+    content_manager: "Content manager"
+  liquor_help:
+    header: "Liquor help"
+    tags_title: "Tags"
+    filters_title: "Filters"
+    variables_title: "Variables"
+    scopes_title: "Scopes"
+    endpoints_title: "Endpoints"
+    property: "Property of"
+    parameter: "Parameter for"
+    description: "Description"
+    specification: "Detailed Liquor specification"
+    tags:
+      declare:
+        main_description: "Tag declare could be used for variables declaration and initial value setup in this form:"
+        additional_description: "Difference between declare and assign tag - with declare you can create variables with the same names but in different scopes."
+      assign:
+        main_description: "Tag assign could be used for variables declaration and its initial value setup in this form:"
+      if:
+        main_description: "Tag if is a standard conditional statement and has this form:"
+      unless:
+        main_description: 'Tag unless executes its "body" if conditional expression results in false or null:'
+      for:
+        main_description: "Tag for is a standard cycle statement and has this form:&nbsp;"
+      capture:
+        main_description: "Tag capture runs code and saves result in var. If var already contained value, capture changes it:"
+      content_for:
+        main_description: "Tag content_for runs code and saves result in some handle:"
+      yield:
+        main_description: "Tag yield has 3 forms. In the simples case (without arguments) it inserts content of internal template (Page content in terms of this CMS). If string with handle was setup with {% content_for %}, then yield returns this string. If no string with handle, yield returns result of if_none block execution, if such block was specified, or just empty string:"
+      include:
+        main_description: 'Tag include includes content of Snippet into template. The only argument of include - Snippet ID (field "Slug/ID" that you need to setup on Snippet creation in "Snippets"):'
+    scopes:
+      find_by:
+        main_description: 'find_by allows you to find one element in collection by some condition/criteria'
+      find_all_by:
+        main_description: 'find_all_by finds all collection elements matching criterias'
+      except:
+        main_description: 'except returns you all collection elements except ones provided as argument'
+      find_except_by:
+        main_description: 'find_except_by finds all collection elements not matching provided criterias'
+      limit:
+        main_description: 'limit method is equal to SQL limit so it allows to limit number of collection items'
+      offset:
+        main_description: 'offset method is equal to SQL offset so it allows to fetch records by offset'
+      first:
+        main_description: 'returns first element in collection'
+      last:
+        main_description: 'returns last element in collection'
+      by_index:
+        main_description: 'returns element by its index'
+      pluck:
+        main_description: 'returns collection containing elements specific field values (not full object)'
+    variables:
+      var_loop:
+        main_description: 'Variable giving access to current state of cycle/iteration. Can be used only in "for" cycle. var_loop - common name, for accessing actual cycle variable you need to concatenate cycle variable name and "_loop". Example:'
+        properties:
+          length: "Iterations count (collection size)"
+          index: "Current iteration index - index of element"
+      page:
+        main_description: 'Variable "page" can be accessed in any template and references to current page:'
+        properties:
+          slug: 'Value of "Slug" field'
+          fullpath: 'Page fullpath'
+          title: 'Value of "Title" field'
+          published: 'Value of "Published" field'
+          hidden: 'Value of "Hidden (from navigation)" field'
+          templatable: 'Value of "Use as object template" field'
+          children: 'Returns "children" collection - pages having this page as parent in "Parent page" field'
+          parent: 'Parent page reference'
+      index:
+        main_description: 'Variable "index" accessible in templates and references to root page (with "index" slug). Object properties are the same as for "page" variable.'
+      request:
+        main_description: 'Variable "request" gives an access to some properties of current request:'
+        properties:
+          path: 'Returns request relative path'
+          url: 'Returns request URL'
+          host: 'Returns host - domain name or IP address'
+          base_url: 'Returns request root URL - protocol + domain name or IP, ex., "http://example.com"'
+          referer: 'Returns URL of page that initiated current request'
+          form_authenticity_token: 'Returns authenticity token for current request - for form protection from CSRF attack'
+          param: "Returns URL param. Example: request.param('page')"
+      item:
+        main_description: 'Variable "item" gives access to current object of "templatable" page. "Templatable" - page with enabled "Use as object template" field and chosen object in "Object" field. Properties of "item" depend on concrete object.'
+      search:
+        main_description: "Variable 'search' gives access to search results. Need to use on search results page. Searching possible, if request contains 'query' param, i.e. URL like /some_path?query=text. Object 'search' - array of search results (SearchItem objects). Properties of SearchItem could be found below."
+      search_item:
+        main_description: 'search_item is a search results element (element of "search" collection).'
+        properties:
+          title: 'Page title'
+          content: 'Content with search query'
+          link: 'Link to page, containing query'
+    filters:
+      asset_path:
+        main_description: 'Filter "asset_path" allows to get a relative path to any file from "Assets" section by filename:'
+      asset_tag:
+        main_description: 'Filter "asset_tag" allows to include javascript and css files, uploaded to "Assets" section:'
+      resize:
+        main_description: 'This function/filter helps to change image size on-the-fly. For this filter you need to use absolute URL of image and "format" argument. Returns also URL. To get absolute URL (having only relative - any asset from "Assets") you should use "request.base_url":'
+      add_watermark:
+        main_description: 'It allows to add watermark to image. You need image URL and 3 arguments: "image" - watermark image (watermark), "dissolve" - transparency and "position" - position. Returns also URL:'
+      ends_with:
+        main_description: 'Allows to check if string ends with some pattern:'
+      currency:
+        main_description: 'Formats currency values. Possible options: precision, delimiter, separator, format, unit:'
+  activerecord:
+    errors:
+      messages:
+        duplicate: "is duplicate"
+      models:
+        kms/page:
+          attributes:
+            template:
+              required: "can't be blank"
+    models:
+      kms/template:
+        one: "Template"
+        few: "Templates"
+        many: "Templates"
+        other: "Templates"
+      kms/page:
+        one: "Page"
+        few: "Pages"
+        many: "Pages"
+        other: "Pages"
+      kms/asset:
+        one: "Asset"
+        few: "Assets"
+        many: "Assets"
+        other: "Assets"
+      kms/user:
+        one: "User"
+        few: "Users"
+        many: "Users"
+        other: "Users"
+      kms/snippet:
+        one: "Snippet"
+        few: "Snippets"
+        many: "Snippets"
+        other: "Snippets"
+    attributes:
+      kms/template:
+        name: "Name"
+        content: "Content"
+      kms/page:
+        title: "Title"
+        content: "Content"
+        slug: "Slug"
+        published: "Published"
+        template: "Template"
+        parent: "Parent page"
+        templatable: "Use as object template"
+        templatable_type: "Object"
+        hidden: 'Hidden (from navigation)'
+      kms/asset:
+        file: "File"
+      kms/user:
+        email: "Email"
+        password: "Password"
+        password_confirmation: "Password Confirmation"
+        role: "Role"
+      kms/snippet:
+        name: "Name"
+        slug: "Slug/ID"
+        content: "Content"

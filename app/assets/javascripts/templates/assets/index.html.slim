@@ -1,0 +1,95 @@
+.row ng-show="assetsArray.length"
+  .col-lg-12
+    .widget.assets-block
+      .widget-header
+        tabset
+          tab
+            tab-heading
+              i.fa.fa-image
+              = I18n.t(:images)
+            .table-responsive
+              table.table
+                tbody
+                  tr ng-repeat="asset in assets.images"
+                    td style="width: 10%"
+                      img.img-responsive ng-src="{{ asset.url }}"
+                    td style="width: 40%"
+                      a ui-sref="assets.edit({id: asset.id})"
+                        | {{ asset.filename }}
+                    td style="width: 40%"
+                      | {{asset.url}}
+                    td
+                      .btn-group.pull-right
+                        a.btn.btn-sm.btn-danger ng-click="destroy(asset)"
+                          i.fa.fa-times
+          tab
+            tab-heading
+              i.fa.fa-code
+              = I18n.t(:stylesheets)
+            .table-responsive
+              table.table
+                tbody
+                  tr ng-repeat="asset in assets.css"
+                    td style="width: 40%"
+                      a ui-sref="assets.edit({id: asset.id})"
+                        | {{ asset.filename }}
+                    td style="width: 40%"
+                      | {{asset.url}}
+                    td
+                      .btn-group.pull-right
+                        a.btn.btn-sm.btn-danger ng-click="destroy(asset)"
+                          i.fa.fa-times
+          tab
+            tab-heading
+              i.fa.fa-code
+              = I18n.t(:javascripts)
+            .table-responsive
+              table.table
+                tbody
+                  tr ng-repeat="asset in assets.javascript"
+                    td style="width: 40%"
+                      a ui-sref="assets.edit({id: asset.id})"
+                        | {{ asset.filename }}
+                    td style="width: 40%"
+                      | {{asset.url}}
+                    td
+                      .btn-group.pull-right
+                        a.btn.btn-sm.btn-danger ng-click="destroy(asset)"
+                          i.fa.fa-times
+          tab
+            tab-heading
+              i.fa.fa-font
+              = I18n.t(:fonts)
+            .table-responsive
+              table.table
+                tbody
+                  tr ng-repeat="asset in assets.fonts"
+                    td style="width: 40%"
+                      a ui-sref="assets.edit({id: asset.id})"
+                        | {{ asset.filename }}
+                    td style="width: 40%"
+                      | {{asset.url}}
+                    td
+                      .btn-group.pull-right
+                        a.btn.btn-sm.btn-danger ng-click="destroy(asset)"
+                          i.fa.fa-times
+          tab
+            tab-heading
+              i.fa.fa-file-text
+              = I18n.t(:other_assets)
+            .table-responsive
+              table.table
+                tbody
+                  tr ng-repeat="asset in assets.other"
+                    td style="width: 40%"
+                      a ui-sref="assets.edit({id: asset.id})"
+                        | {{ asset.filename }}
+                    td style="width: 40%"
+                      | {{asset.url}}
+                    td
+                      .btn-group.pull-right
+                        a.btn.btn-sm.btn-danger ng-click="destroy(asset)"
+                          i.fa.fa-times
+          li.pull-right
+            a.btn.btn-sm.btn-primary.add-asset ui-sref="assets.new"
+              = I18n.t("add_asset")

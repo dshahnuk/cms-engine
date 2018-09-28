@@ -6,10 +6,13 @@ require 'kms/functions/assets'
 require 'kms/functions/currency'
 require 'kms/externals/bigdecimal'
 require 'kms/externals/request'
+require "friendly_id"
+
 module Kms
   class Engine < ::Rails::Engine
     isolate_namespace Kms
 
+    config.eager_load_paths += Dir["#{config.root}/lib/**/"]
     config.to_prepare do
       ::Devise::SessionsController.layout "kms/devise"
       ::Devise::RegistrationsController.layout "kms/devise"
@@ -59,6 +62,14 @@ module Kms
             puts error
           end
         end
+      end
+    end
+
+    initializer "kms_models.register_models_collections" do |app|
+      app.config.after_initialize do
+        Kms::Model.pluck(:collection_name).each do |collection_name|
+          Kms::ModelsWrapperDrop.register_model collection_name
+        end if Kms::Model.table_exists?
       end
     end
   end

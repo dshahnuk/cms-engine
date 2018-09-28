@@ -1,0 +1,46 @@
+ModelsController = ($scope, $state, Restangular, $stateParams, Alertify, ErrorsService, TransliterationService) ->
+  $scope.store = Restangular.all('models')
+
+  Restangular.all('users').customGET('kms_user').then (current_user) ->
+    $scope.currentUser = current_user
+    $scope.currentUser.admin = $scope.currentUser.role == 'admin'
+
+  $scope.store.getList().then (models)->
+    $scope.models = models
+
+  if $stateParams.id
+    $scope.store.get($stateParams.id).then (model)->
+      $scope.model = model
+  else
+    $scope.model = {fields_attributes: []}
+
+  $scope.$watchCollection 'model.fields_attributes', (newFields, oldFields) ->
+    if newFields and newFields.length > 0 and oldFields and oldFields.length == 0
+      $scope.model.label_field =newFields[0].liquor_name
+
+  $scope.$watch 'model.kms_model_name', (newValue, oldValue) ->
+    if newValue? and !$scope.model.id
+      $scope.model.collection_name = _.snakeCase TransliterationService.translit(newValue, 5).replace(/`/g, '')
+
+  $scope.create = ->
+    $scope.store.post($scope.model).then ->
+      # for adding to Menu - better to render resources via js
+      window.location.reload()
+      #$state.go('models')
+    ,(response)->
+      Alertify.error(ErrorsService.prepareErrorsString(response.data.errors))
+
+  $scope.update = ->
+    $scope.model.put().then ->
+      $state.go('models')
+    ,(response)->
+      Alertify.error(ErrorsService.prepareErrorsString(response.data.errors))
+
+  $scope.destroy = (model)->
+    if confirm('<%= I18n.t(:are_you_sure) %>')
+      model.remove().then ->
+        window.location.reload()
+
+
+angular.module('KMS')
+    .controller('ModelsController', ['$scope', '$state', 'Restangular', '$stateParams', 'Alertify', 'ErrorsService', 'TransliterationService', ModelsController])

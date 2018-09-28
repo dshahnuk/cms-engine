@@ -1,0 +1,61 @@
+FieldsController = ($scope, $state, Restangular, $stateParams, TransliterationService) ->
+  $scope.types = [
+    { id: 'Kms::StringField', name: "<%= I18n.t("field_types.string") %>", icon: 'fa-font'},
+    { id: 'Kms::TextField', name: "<%= I18n.t("field_types.text") %>", icon: 'fa-file-text-o'},
+    { id: 'Kms::CheckboxField', name: "<%= I18n.t("field_types.checkbox") %>", icon: 'fa-check-square-o'},
+    { id: 'Kms::DateField', name: "<%= I18n.t("field_types.date") %>", icon: 'fa-calendar'},
+    { id: 'Kms::FileField', name: "<%= I18n.t("field_types.file") %>", icon: 'fa-image'},
+    { id: 'Kms::HasManyField', name: "<%= I18n.t("field_types.has_many") %>", icon: 'fa-sitemap'},
+    { id: 'Kms::BelongsToField', name: "<%= I18n.t("field_types.belongs_to") %>", icon: 'fa-leaf'},
+  ]
+
+  $scope.fieldsSortableOptions =
+    orderChanged: (event)->
+      for field, index in event.dest.sortableScope.modelValue
+        field_copy =
+          id: field.id
+          position: index
+        Restangular.restangularizeElement($scope.model, field_copy, 'fields').put()
+
+  Restangular.all('resources').getList().then (templatable_types)->
+    $scope.templatable_types = templatable_types
+
+  Restangular.all('users').customGET('kms_user').then (current_user) ->
+    $scope.currentUser = current_user
+    $scope.currentUser.admin = $scope.currentUser.role == 'admin'
+
+  $scope.field = {}
+
+  $scope.$watch 'field.name', (newValue, oldValue) ->
+    if newValue? and !$scope.field.id
+      $scope.field.liquor_name = _.snakeCase TransliterationService.translit(newValue, 5).replace(/`/g, '')
+
+  $scope.findTypeByField = (field) ->
+    _.find $scope.types, (type) -> type.id == field.type
+
+  $scope.formatType = (field) ->
+    fieldType = $scope.findTypeByField(field)
+    if $scope.isAssociationField(field) then "#{fieldType.name} (#{$scope.getDisplayableTemplatableType(field)})" else fieldType.name
+
+  $scope.getDisplayableTemplatableType = (field)->
+    templatable_type = _.find $scope.templatable_types, (templatable_type) -> templatable_type.type == field.class_name
+    templatable_type.title
+
+  $scope.isAssociationField = (field)->
+    field.type == 'Kms::HasManyField' or field.type == 'Kms::BelongsToField'
+
+  $scope.isValidField = ->
+    $scope.field.name and $scope.field.liquor_name and $scope.field.type
+
+  $scope.addField = ->
+    if $scope.isValidField()
+      $scope.model.fields_attributes.push($scope.field)
+      $scope.field = {}
+
+  $scope.removeField = (field)->
+    field['_destroy'] = '1' # for rails deletion
+    #$scope.model.fields = _.without($scope.model.fields, field)
+
+
+angular.module('KMS')
+    .controller('FieldsController', ['$scope', '$state', 'Restangular', '$stateParams', 'TransliterationService', FieldsController])

@@ -14,3 +14,4 @@ Kms::ExternalsRegistry.register(:search) do |request,_|
   search_service = Kms::SearchService.new(request.params[:query])
   search_service.search
 end
+Kms::ExternalsRegistry.register(:models) {|_,_| Kms::ModelsWrapper.new.to_drop }

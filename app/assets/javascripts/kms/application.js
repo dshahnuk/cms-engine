@@ -55,4 +55,5 @@
 //= require_tree ../templates
 //= require_tree ./application/services
 //= require_tree ./application/controllers
+//= require kms_models/application
 //= require application

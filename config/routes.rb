@@ -4,6 +4,7 @@ Kms::Engine.routes.draw do
     failure_app:  'Kms::Devise::FailureApp',
     module: :devise,
     controllers: { registrations: "users/registrations" }
+
   constraints(format: "json") do
     resources :templates, except: [:new, :edit], format: true
     resources :snippets, except: [:new, :edit], format: true
@@ -19,14 +20,26 @@ Kms::Engine.routes.draw do
     end
     resources :resources, only: :index, format: true
     resource :settings, only: [:show, :update], format: true
+
+    resources :models, format: true do
+      resources :entries, format: true do
+        member do
+          post '' => 'entries#update'
+        end
+      end
+      resources :fields, only: :update, format: true
+    end
   end
+
   post "/assets/ckeditor" => "assets#ckeditor"
+
   constraints(format: "html") do
     get "/(*path)" => "kms#index"
   end
-
 end
+
 Rails.application.routes.draw do
-    root 'kms/public/pages#show'
-    get "*path" => "kms/public/pages#show"
+ root 'kms/public/pages#show'
+ get "*path" => "kms/public/pages#show"
+ post '/entries/:collection_name' => 'kms/public/entries#create'
 end

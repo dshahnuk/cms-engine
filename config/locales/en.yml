@@ -35,7 +35,7 @@ en:
   update_user: "Update user"
   toggle_fullscreen_mode_instruction: "Press F11 when cursor is in the editor to toggle full screen editing. ESC can also be used to exit full screen editing."
   add_snippet: "Add snippet"
-  create_first_snippet: "Create first snippet"
+  create_first_snippet: "Create first snippet11"
   new_snippet: "New Snippet"
   edit_snippet: "Edit Snippet"
   update_snippet: "Update snippet"
@@ -64,6 +64,42 @@ en:
   roles_description: "Admins can manage any content. Content managers have access only to \"Pages\" and \"Assets\" under \"Content Management\" section (but also have access to other sections). The second difference is Admins see pages content in html editor, Content Managers - in WYSIWYG editor"
   or_hit: "or hit "
   while_your_cursor_in_input: " while your cursor in input"
+  models: "Models"
+  add_model: "Add Model"
+  new_model: "New Model"
+  edit_model: "Edit Model"
+  update_model: "Update Model"
+  add_entry: "Add Entry"
+  new_entry: "New Entry"
+  edit_entry: "Edit Entry"
+  update_entry: "Update Entry"
+  no_fields_yet: "No fields yet. Add first field using form below."
+  select_field_type: "Select field type"
+  select_model: "Select Model"
+  collection_name_field_hint: "You can access model collection like this: models.your_collection_name (ex., models.services)"
+  description_field_hint: "Optional field. Just write some description so everyone would be aware what's the purpose of this Model"
+  label_field_hint: "Add at least one Field below. And then you could choose one that would be used for item permalink generation and entries list displaying"
+  allow_creation_using_form_field_hint: "On website you can place a form allowing to create model entries"
+  has_many_field_placeholder: "Select related objects..."
+  belongs_to_field_placeholder: "Select related object..."
+  models_description: "Models are where you organize your content (basically dynamic) like 'News', 'Blog', 'Services' and etc."
+  create_first_model: "Create first model"
+  entries_description: "Here you would create content for corresponding Model"
+  create_first_entry: "Create first entry"
+  field_types:
+    string: "String"
+    text: "Text"
+    checkbox: "Checkbox"
+    date: "Date"
+    file: "File"
+    has_many: "Has many"
+    belongs_to: "Belongs to"
+    endpoints:
+      entries:
+        post:
+          main_description: This endpoint allows you to setup form submitting Model's elements. For example, if you have a model with collection name "posts" (and field with "title" Liquor name), you could create a form with action="/entries/posts" and an input with name="entry[title]"
+          parameters:
+            entry: Value of each parameter will be saved to corresponding Model's entry field
   roles:
     admin: "Admin"
     content_manager: "Content manager"
@@ -78,6 +114,15 @@ en:
     parameter: "Parameter for"
     description: "Description"
     specification: "Detailed Liquor specification"
+    variables:
+      models:
+        main_description: 'Variable "models" gives access to models collections of entries. You can access collection using model collection name - "Collection name (for Liquor)" field. For example, if you created some Model with "services" collection name, then you could iterate its collection using "for" tag like this:'
+    endpoints:
+      entries:
+        post:
+          main_description: This endpoint allows you to setup form submitting Model's elements. For example, if you have a model with collection name "posts" (and field with "title" Liquor name), you could create a form with action="/entries/posts" and an input with name="entry[title]"
+          parameters:
+            entry: Value of each parameter will be saved to corresponding Model's entry field
     tags:
       declare:
         main_description: "Tag declare could be used for variables declaration and initial value setup in this form:"
@@ -172,6 +217,21 @@ en:
       currency:
         main_description: 'Formats currency values. Possible options: precision, delimiter, separator, format, unit:'
   activerecord:
+    attributes:
+      kms/model:
+        kms_model_name: "Name"
+        collection_name: "Collection name (for Liquor)"
+        description: "Description"
+        fields: "Fields"
+        label_field: "Label field (used for URL/slug generating)"
+        allow_creation_using_form: "Allow creation using form"
+      kms/field:
+        name: "Name"
+        liquor_name: "Name for Liquor"
+        type: "Type"
+        required: "Required"
+      kms/entry:
+        slug: "Slug"
     errors:
       messages:
         duplicate: "is duplicate"
@@ -181,6 +241,16 @@ en:
             template:
               required: "can't be blank"
     models:
+      kms/model:
+        one: "Model"
+        few: "Models"
+        many: "Models"
+        other: "Models"
+      kms/entry:
+        one: "Entry"
+        few: "Entries"
+        many: "Entries"
+        other: "Entries"
       kms/template:
         one: "Template"
         few: "Templates"

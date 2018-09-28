@@ -26,6 +26,7 @@
  *= require ng-sortable/dist/ng-sortable
  *= require rdash-ui/dist/css/rdash
  *= require kms/custom
+ *= require kms_models/application
  *= require application
  *= require_self
  */

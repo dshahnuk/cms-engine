@@ -26,7 +26,7 @@ end
 Dragonfly.logger = Rails.logger
 
 # Mount as middleware
-Rails.application.middleware.use Dragonfly::Middleware
+# Rails.application.middleware.use Dragonfly::Middleware
 
 # Add model functionality
 if defined?(ActiveRecord::Base)

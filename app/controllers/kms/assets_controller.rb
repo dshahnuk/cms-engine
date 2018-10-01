@@ -21,13 +21,14 @@ module Kms
     def ckeditor
       @asset = Asset.new(file: params[:upload])
       if @asset.save
-        render text: %Q"<script type='text/javascript'>
-            window.parent.CKEDITOR.tools.callFunction(#{params[:CKEditorFuncNum]}, '#{@asset.file.url}');
-          </script>"
+        render plain: %Q"<div><script type='text/javascript'>
+          window.parent.CKEDITOR.tools.callFunction(#{params[:CKEditorFuncNum]}, '#{@asset.file.url}');
+        </script></div>"
+        render json: {response: 'ok'}
       else
-        render text: %Q"<script type='text/javascript'>
-                window.parent.CKEDITOR.tools.callFunction(#{params[:CKEditorFuncNum]}, null, '#{@asset.errors.full_messages.first}');
-              </script>"
+        render plain: %Q"<script type='text/javascript'>
+          window.parent.CKEDITOR.tools.callFunction(#{params[:CKEditorFuncNum]}, null, '#{@asset.errors.full_messages.first}');
+        </script>"
       end
     end
 

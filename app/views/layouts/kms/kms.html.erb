@@ -163,5 +163,17 @@
 
   <%= javascript_include_tag 'kms/application', 'data-turbolinks-track' => true %>
 
+  <script type="application/javascript">
+    CKEDITOR.on('dialogDefinition', function (e) {
+      var dialogName = e.data.name;
+      var dialog = e.data.definition.dialog;
+      dialog.on('show', function () {
+        console.log(dialog.definition.contents[2].elements);
+        console.log(dialog.definition.dialog.parts.contents);
+      });
+      dialog.on('hide', function () {
+      });
+    });
+  </script>
 </body>
 </html>

@@ -45,7 +45,7 @@ module Kms
     end
 
     def self.render(path)
-      refresh if Settings.get(:dirty).present?
+      refresh if Settings.get(:dirty).present? || ExternalsRegistry.externals.empty?
 
       request = OpenStruct.new(params: {path: path})
 

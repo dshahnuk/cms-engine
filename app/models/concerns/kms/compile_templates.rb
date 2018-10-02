@@ -38,6 +38,7 @@ module Kms
     def compile_templates
       register_liquor_template
       Kms.template_manager.compile
+      Settings.set(:dirty, true)
     end
   end
 end

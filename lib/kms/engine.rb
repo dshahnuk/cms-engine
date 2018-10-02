@@ -17,6 +17,7 @@ module Kms
       ::Devise::SessionsController.layout "kms/devise"
       ::Devise::RegistrationsController.layout "kms/devise"
       ::Devise::PasswordsController.layout "kms/devise"
+
       Dir.glob(Rails.root + "kms_*/**/*_decorator*.rb").each do |c|
         require_dependency(c)
       end
@@ -39,37 +40,14 @@ module Kms
 
     initializer "kms.compile_templates" do |app|
       app.config.before_initialize do
-        Kms.template_manager = Liquor::Manager.new(import: Kms::FunctionsRegistry.modules)
-
-        if ActiveRecord::Base.connection.tables.include?('kms_templates')
-          Template.all.each do |template|
-            Kms.template_manager.register_layout(template.register_id, template.content || "", Kms::ExternalsRegistry.externals.keys)
-          end
-        end
-        if ActiveRecord::Base.connection.tables.include?('kms_pages')
-          Page.all.each do |page|
-            Kms.template_manager.register_template(page.register_id, page.content || "", Kms::ExternalsRegistry.externals.keys)
-          end
-        end
-        if ActiveRecord::Base.connection.tables.include?('kms_snippets')
-          Snippet.all.each do |snippet|
-            Kms.template_manager.register_partial(snippet.register_id, snippet.content || "")
-          end
-        end
-
-        unless Kms.template_manager.compile
-          Kms.template_manager.errors.each do |error|
-            puts error
-          end
-        end
+        errors = Kms::MainService.compile
+        errors.each {|error| pp error } if errors.any?
       end
     end
 
     initializer "kms_models.register_models_collections" do |app|
       app.config.after_initialize do
-        Kms::Model.pluck(:collection_name).each do |collection_name|
-          Kms::ModelsWrapperDrop.register_model collection_name
-        end if Kms::Model.table_exists?
+        Kms::MainService.register_models
       end
     end
   end

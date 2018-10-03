@@ -16,6 +16,7 @@ module Kms
       install_production = path.include?('generators')
       config.eager_load_paths << path unless install_production
     end
+    puts config.eager_load_paths
 
     config.generators do |g|
       g.test_framework      :rspec,        :fixture => false

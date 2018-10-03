@@ -1,3 +1,4 @@
+require 'rails/generators'
 module Kms
   class InstallGenerator < Rails::Generators::Base
 

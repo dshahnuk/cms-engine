@@ -1,6 +1,7 @@
 module Kms
   class Asset < ActiveRecord::Base
     include UpdateStylesheetsText
+    include CompileTemplates
 
     mount_uploader :file, AssetUploader
 

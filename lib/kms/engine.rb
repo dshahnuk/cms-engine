@@ -13,7 +13,7 @@ module Kms
     isolate_namespace Kms
 
     Dir["#{config.root}/lib/**/"].each do |path|
-      install_production = Rails.env == 'production' && path.include?('install')
+      install_production = path.include?('generators')
       config.eager_load_paths << path unless install_production
     end
 

@@ -12,7 +12,11 @@ module Kms
   class Engine < ::Rails::Engine
     isolate_namespace Kms
 
-    config.eager_load_paths += Dir["#{config.root}/lib/**/"]
+    Dir["#{config.root}/lib/**/"].each do |path|
+      install_production = Rails.env == 'production' && path.include?('install')
+      config.eager_load_paths << path unless install_production
+    end
+
     config.generators do |g|
       g.test_framework      :rspec,        :fixture => false
       g.fixture_replacement :factory_girl, :dir => 'spec/factories'

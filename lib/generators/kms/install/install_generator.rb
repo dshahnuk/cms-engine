@@ -8,11 +8,11 @@ module Kms
 
       Kms::InstallGenerator.source_root(File.expand_path('../templates', __FILE__))
 
-      template 'devise.rb_', 'config/initializers/devise.rb'
+      template 'devise.rb', 'config/initializers/devise.rb'
 
-      template 'dragonfly.rb_', 'config/initializers/dragonfly.rb'
+      template 'dragonfly.rb', 'config/initializers/dragonfly.rb'
 
-      template 'carrierwave.rb_', 'config/initializers/carrierwave.rb'
+      template 'carrierwave.rb', 'config/initializers/carrierwave.rb'
 
     end
 

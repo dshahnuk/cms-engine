@@ -13,15 +13,6 @@ module Kms
     isolate_namespace Kms
 
     config.eager_load_paths += Dir["#{config.root}/lib/**/"]
-    config.to_prepare do
-      ::Devise::SessionsController.layout "kms/devise"
-      ::Devise::RegistrationsController.layout "kms/devise"
-      ::Devise::PasswordsController.layout "kms/devise"
-
-      Dir.glob(Rails.root + "kms_*/**/*_decorator*.rb").each do |c|
-        require_dependency(c)
-      end
-    end
 
     config.generators do |g|
       g.test_framework      :rspec,        :fixture => false
@@ -31,11 +22,24 @@ module Kms
     end
 
     initializer "kms.assets" do |app|
-      app.config.assets.paths << Rails.root.join('vendor', 'assets', 'bower_components')
-      app.config.assets.precompile += %w(kms/application.js kms/application.css)
-      app.config.assets.precompile += %w( avatar.jpg )
-      app.config.assets.precompile += %w( **/*.svg **/*.eot **/*.woff **/*.ttf )
-      app.config.assets.precompile += %w( ng-ckeditor/libs/ckeditor/** )
+      if Kms.skip_ui
+        puts 'UI disabled'
+
+        app.config.assets.enabled = false
+        app.config.assets.paths = []
+      else
+        puts 'UI enabled'
+
+        ::Devise::SessionsController.layout "kms/devise"
+        ::Devise::RegistrationsController.layout "kms/devise"
+        ::Devise::PasswordsController.layout "kms/devise"
+
+        app.config.assets.paths << Rails.root.join('vendor', 'assets', 'bower_components')
+        app.config.assets.precompile += %w(kms/application.js kms/application.css)
+        app.config.assets.precompile += %w( avatar.jpg )
+        app.config.assets.precompile += %w( **/*.svg **/*.eot **/*.woff **/*.ttf )
+        app.config.assets.precompile += %w( ng-ckeditor/libs/ckeditor/** )
+      end
     end
 
     initializer "kms.compile_templates" do |app|

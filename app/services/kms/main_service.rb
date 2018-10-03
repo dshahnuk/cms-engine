@@ -56,9 +56,9 @@ module Kms
       page_result = Kms.template_manager.render(page.register_id, externals)
       result = Kms.template_manager.render(template.register_id, externals.merge(_inner_template: page_result))
 
-      {html: result.html_safe, status: page.not_found? ? :not_found : :ok}
+      [result, page.not_found? ? :not_found : :ok]
     rescue ActiveRecord::RecordNotFound
-      {status: :not_found}
+      [nil, :not_found]
     end
   end
 end

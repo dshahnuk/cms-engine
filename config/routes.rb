@@ -1,4 +1,4 @@
-unless Kms.skip_routes
+unless Kms.skip_ui
   Kms::Engine.routes.draw do
     devise_for :kms_users,
       class_name: "Kms::User",

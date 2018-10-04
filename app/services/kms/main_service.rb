@@ -44,12 +44,10 @@ module Kms
       Settings.set(:dirty, false)
     end
 
-    def self.render(path)
+    def self.render(request, controller)
       refresh if Settings.get(:dirty).present? || ExternalsRegistry.externals.empty?
 
-      request = OpenStruct.new(params: {path: path})
-
-      externals = Hash[ExternalsRegistry.externals.map{ |k, v| [k, v.call(request, nil)] }]
+      externals = Hash[ExternalsRegistry.externals.map{ |k, v| [k, v.call(request, controller)] }]
       page = externals[:page].source
       template = page.template
 

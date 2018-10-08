@@ -44,7 +44,7 @@ module Kms
     initializer "kms.compile_templates" do |app|
       app.config.before_initialize do
         errors = Kms::MainService.compile
-        errors.each {|error| pp error } if errors.any? && !Kms.skip_ui
+        errors.each {|error| pp error } if errors.any?
       end
     end
 

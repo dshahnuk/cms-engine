@@ -22,12 +22,12 @@ module Kms
 
     initializer "kms.assets" do |app|
       if Kms.skip_ui
-        puts 'UI disabled'
+        puts 'CMS UI disabled'
 
         app.config.assets.enabled = false
         app.config.assets.paths = []
       else
-        puts 'UI enabled'
+        puts 'CMS UI enabled'
 
         ::Devise::SessionsController.layout "kms/devise"
         ::Devise::RegistrationsController.layout "kms/devise"
@@ -44,7 +44,7 @@ module Kms
     initializer "kms.compile_templates" do |app|
       app.config.before_initialize do
         errors = Kms::MainService.compile
-        errors.each {|error| pp error } if errors.any?
+        errors.each {|error| pp error } if errors.any? && !Kms.skip_ui
       end
     end
 

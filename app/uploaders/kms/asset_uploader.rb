@@ -41,7 +41,11 @@ module Kms
     process :save_content_type_in_model
 
     def save_content_type_in_model
-      model.content_type = file.content_type if file.content_type
+      content_type = file.content_type
+      if content_type
+        content_type = 'application/javascript' if content_type.match(/application\/\w+script/)
+        model.content_type = content_type
+      end
     end
 
     # Add a white list of extensions which are allowed to be uploaded.

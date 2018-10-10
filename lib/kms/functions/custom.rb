@@ -9,12 +9,6 @@ module Kms
         arg.scan(Regexp.new(kw[:pattern]))
       end
 
-      function 'arr_get', unnamed_arg: :tuple,
-        mandatory_named_args: { index: :integer } do |arg, kw|
-
-        arg[kw[:index]]
-      end
-
     end
   end
 end

@@ -17,9 +17,10 @@ module Kms
       parent_page_path = Kms::Page::INDEX_FULLPATH if parent_page_path == "."
       parent_page = Kms::Page.published.find_by_fullpath!(parent_page_path)
       templatable_pages = parent_page.children.where(templatable: true)
-      templatable_pages.detect do |templatable_page|
-        templatable_page.fetch_item(File.basename(@path))
+      templatable_pages.each do |templatable_page|
+        return templatable_page if templatable_page.fetch_item(File.basename(@path))
       end
+      nil
     end
 
     # find special page with '404' slug

@@ -5,6 +5,7 @@ require 'kms/drops/search_item_drop'
 require 'kms/functions/assets'
 require 'kms/functions/currency'
 require 'kms/externals/bigdecimal'
+require 'kms/externals/array'
 require 'kms/externals/request'
 require "friendly_id"
 

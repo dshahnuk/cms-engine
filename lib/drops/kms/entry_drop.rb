@@ -6,6 +6,8 @@ module Kms
 
     # overriding methods cause we work with 'json' column
     class Scope
+      export :size
+
       def find_by(_, fields={})
         fields, = Liquor::Drop.unwrap_scope_arguments([ fields ])
 
@@ -34,6 +36,10 @@ module Kms
         end
         # we use reorder because by default we order by position
         Liquor::DropDelegation.wrap_scope @source.reorder(*parsed_args)
+      end
+
+      def size
+        @source.size
       end
 
       private

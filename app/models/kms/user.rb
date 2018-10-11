@@ -16,8 +16,5 @@ module Kms
     def localized_role
       I18n.t("roles.#{role}")
     end
-
-    def remember_created_at=(value)
-    end
   end
 end

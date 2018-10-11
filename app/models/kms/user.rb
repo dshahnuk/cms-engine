@@ -19,9 +19,5 @@ module Kms
 
     def remember_created_at=(value)
     end
-
-    def role
-      'quest'
-    end
   end
 end
